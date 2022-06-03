@@ -1,0 +1,27 @@
+clear;
+clc;
+b=2;
+omega_alpha=52;
+miu=5;
+e=0.4;
+x_alpha=0.25;
+omega_halpha=0.5;
+r=sqrt(0.5);
+l=1;
+X=zeros(1001,4);
+for k=0.1:0.001:1.5
+[L_h,L_alpha,M_h,M_alpha]=parameter(k);
+M=miu^2*r^2*omega_halpha^2;
+N=-miu^2*r^2*(1+omega_halpha^2)+miu*(e*(L_alpha+M_h)*omega_halpha^2....
+-M_alpha*omega_halpha^2-e^2*L_h*omega_halpha^2-L_h*r^2);
+P=miu^2*(r^2-x_alpha^2)+miu*(M_alpha+e*(2*x_alpha*L_h-L_alpha-M_h)+L_h*(e^2+r^2)-x_alpha*(L_alpha+M_h))+M_alpha*L_h-L_alpha*M_h;
+A=M;
+B=real(N);C=real(P);
+D=imag(N);E=imag(P);
+X1=(-B+sqrt(B^2-4*A*C))/2/A;
+X2=(-B-sqrt(B^2-4*A*C))/2/A;
+X3=-E/D;
+X(l,1)=k;X(l,2)=X1;X(l,3)=X2;X(l,4)=X3;
+l=l+1;
+end
+plot(X(:,1),X(:,2),'b',X(:,1),X(:,3),'r',X(:,1),X(:,4),'k','LineWidth',2);
